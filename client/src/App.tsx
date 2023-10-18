@@ -1,20 +1,49 @@
-import { useEffect, useRef } from "react";
+import React from "react";
+import VideoJS from "./VideoJS";
 
 const App = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  // <div>
+  //   <h2>Video Player</h2>
+  //   <video muted controls width="640" height="360" autoPlay>
+  //     <source src="http://localhost:4000/video" />
+  //   </video>
+  // </div>
 
-  useEffect(() => {
-    if (videoRef.current) {
-      const videoUrl = "https://5492-118-218-199-56.ngrok.io/video";
-      videoRef.current.src = videoUrl;
-    }
-  }, [videoRef]);
+  const playerRef = React.useRef(null);
+
+  const videoJsOptions = {
+    autoplay: true,
+    controls: true,
+    responsive: true,
+    fluid: true,
+    sources: [
+      {
+        src: "http://localhost:4000/video",
+        type: "video/mp4",
+      },
+    ],
+  };
+
+  const handlePlayerReady = (player: any) => {
+    playerRef.current = player;
+
+    // You can handle player events here, for example:
+    player.on("waiting", () => {
+      // videojs.log("player is waiting");
+      console.log("player is waiting");
+    });
+
+    player.on("dispose", () => {
+      console.log("player will dispose");
+    });
+  };
 
   return (
-    <div>
-      <h2>Video Player</h2>
-      <video ref={videoRef} muted controls width="640" height="360" autoPlay></video>
-    </div>
+    <>
+      <div>Rest of app here</div>
+      <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
+      <div>Rest of app here</div>
+    </>
   );
 };
 export default App;
