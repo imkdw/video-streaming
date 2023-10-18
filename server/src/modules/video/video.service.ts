@@ -29,6 +29,7 @@ export default class VideoService {
       res.setHeader('Accept-Ranges', 'bytes');
       res.setHeader('Content-Range', `bytes ${start}-${end}/${videoSize}`);
       res.setHeader('Content-Length', contentLength);
+      res.setHeader('Content-Type', 'video/mp4');
 
       await pipeline(
         this.awsService.initiateObjectStream(videoKey, start, end),
